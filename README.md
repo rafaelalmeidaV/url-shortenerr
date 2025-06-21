@@ -1,98 +1,349 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# URL Shortener
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Um sistema completo de encurtamento de URLs com autenticação JWT, construído com NestJS, PostgreSQL e Docker.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Funcionalidades
 
-## Description
+- Encurtamento de URLs público e autenticado
+- Autenticação JWT com registro e login de usuários
+- Estatísticas de cliques e métricas
+- CRUD completo para gerenciamento de URLs por usuário
+- Soft delete para preservação de dados
+- Aliases personalizados para URLs
+- Documentação completa com Swagger
+- Testes unitários e E2E
+- Ambiente Docker containerizado
+- Pipeline CI/CD automatizado
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Tecnologias
 
-## Project setup
+- **Backend:** NestJS, TypeScript
+- **Banco:** PostgreSQL, TypeORM
+- **Cache:** Redis
+- **Auth:** JWT, bcryptjs
+- **Docs:** Swagger/OpenAPI
+- **Testes:** Jest, Supertest
+- **Container:** Docker, Docker Compose
+- **CI/CD:** GitHub Actions
+- **Monitoramento:** Prometheus, Grafana
 
-```bash
-$ npm install
-```
+## Como Executar
 
-## Compile and run the project
+### Pré-requisitos
 
-```bash
-# development
-$ npm run start
+- Node.js 20+
+- Docker & Docker Compose
+- Git
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
+### Instalação
 
 ```bash
-# unit tests
-$ npm run test
+# 1. Clonar repositório
+git clone https://github.com/rafaelalmeidav/url-shortenerr.git
+cd url-shortenerr
 
-# e2e tests
-$ npm run test:e2e
+# 2. Subir ambiente com Docker
+docker-compose up --build -d
 
-# test coverage
-$ npm run test:cov
+# 3. Verificar se subiu corretamente
+docker-compose logs -f app
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Executar Localmente
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+# 1. Instalar dependências
+npm install
+
+# 2. Configurar variáveis de ambiente
+cp .env.example .env
+# Editar .env com suas configurações
+
+# 3. Subir apenas o banco
+docker-compose up postgres redis -d
+
+# 4. Executar aplicação
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Configuração
 
-## Resources
+### Variáveis de Ambiente
 
-Check out a few resources that may come in handy when working with NestJS:
+```env
+# Database
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=url_user
+DB_PASSWORD=url_password_123
+DB_DATABASE=url_shortener
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+# Redis
+REDIS_HOST=localhost
+REDIS_PORT=6379
+REDIS_PASSWORD=redis_password_123
 
-## Support
+# JWT
+JWT_SECRET=seu-jwt-secret-super-seguro
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# App
+NODE_ENV=development
+PORT=3000
 
-## Stay in touch
+# Observability
+ENABLE_LOGGING=true
+ENABLE_METRICS=true
+LOG_LEVEL=debug
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+## Endpoints
 
-## License
+### Autenticação
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+| Método | Endpoint | Descrição | Auth |
+|--------|----------|-----------|------|
+| POST | `/auth/register` | Registrar usuário | Não |
+| POST | `/auth/login` | Login | Não |
+
+### URLs
+
+| Método | Endpoint | Descrição | Auth |
+|--------|----------|-----------|------|
+| POST | `/shorten` | Encurtar URL | Opcional |
+| GET | `/my-urls` | Listar URLs do usuário | Sim |
+| PUT | `/urls/:shortCode` | Atualizar URL | Sim |
+| DELETE | `/urls/:shortCode` | Excluir URL | Sim |
+| GET | `/stats/:shortCode` | Estatísticas da URL | Não |
+| GET | `/:shortCode` | Redirecionar para URL original | Não |
+
+## Documentação
+
+Acesse a documentação interativa do Swagger:
+
+```
+http://localhost:3000/api/docs
+```
+
+## Testes
+
+```bash
+# Todos os testes
+npm test
+
+# Testes com coverage
+npm run test:cov
+
+# Testes E2E
+npm run test:e2e
+
+# Testes em modo watch
+npm run test:watch
+```
+
+## Scripts Docker
+
+```bash
+# Subir ambiente completo
+docker-compose up --build -d
+
+# Ver logs
+docker-compose logs -f app
+
+# Parar ambiente
+docker-compose down
+
+# Limpar volumes (cuidado - apaga dados!)
+docker-compose down -v
+
+# Rebuild apenas da app
+docker-compose up --build app
+
+# Entrar no container
+docker-compose exec app sh
+
+# Conectar no PostgreSQL
+docker-compose exec postgres psql -U url_user -d url_shortener
+```
+
+## Serviços Disponíveis
+
+| Serviço | URL | Credenciais |
+|---------|-----|-------------|
+| API | http://localhost:3000 | - |
+| Swagger | http://localhost:3000/api/docs | - |
+| PgAdmin | http://localhost:5050 | admin@urlshortener.com / admin123 |
+| Grafana | http://localhost:3001 | admin / admin123 |
+| Prometheus | http://localhost:9090 | - |
+
+## Exemplos de Uso
+
+### Registrar usuário
+
+```bash
+curl -X POST http://localhost:3000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "usuario@example.com",
+    "name": "João Silva",
+    "password": "123456"
+  }'
+```
+
+### Login
+
+```bash
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "usuario@example.com",
+    "password": "123456"
+  }'
+```
+
+### Encurtar URL (anônimo)
+
+```bash
+curl -X POST http://localhost:3000/shorten \
+  -H "Content-Type: application/json" \
+  -d '{
+    "originalUrl": "https://www.google.com"
+  }'
+```
+
+### Encurtar URL (autenticado)
+
+```bash
+curl -X POST http://localhost:3000/shorten \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer SEU_TOKEN_JWT" \
+  -d '{
+    "originalUrl": "https://www.github.com",
+    "customAlias": "github"
+  }'
+```
+
+### Listar URLs do usuário
+
+```bash
+curl -X GET http://localhost:3000/my-urls \
+  -H "Authorization: Bearer SEU_TOKEN_JWT"
+```
+
+## Desenvolvimento
+
+### Estrutura do Projeto
+
+```
+src/
+├── auth/                 # Módulo de autenticação
+│   ├── dto/             # Data Transfer Objects
+│   ├── entities/        # Entidades do banco
+│   ├── guards/          # Guards JWT
+│   ├── strategies/      # Strategies Passport
+│   └── *.service.ts     # Lógica de negócio
+├── url/                 # Módulo de URLs
+│   ├── dto/
+│   ├── entities/
+│   └── *.service.ts
+├── database/            # Configuração do banco
+└── main.ts             # Ponto de entrada
+```
+
+### Comandos Úteis
+
+```bash
+# Lint
+npm run lint
+npm run lint:fix
+
+# Formatação
+npm run format
+npm run format:check
+
+# Build
+npm run build
+
+# Produção
+npm run start:prod
+```
+
+## CI/CD
+
+O projeto possui pipeline automatizado com GitHub Actions:
+
+- **Lint** - ESLint e Prettier
+- **Testes** - Unitários e E2E com PostgreSQL
+- **Build** - Aplicação e Docker
+- **Deploy** - Automático em produção
+
+## Arquitetura
+
+### Fluxo de Dados
+
+1. **Request** chega no Controller
+2. **Guard** valida autenticação (se necessário)
+3. **DTO** valida dados de entrada
+4. **Service** processa lógica de negócio
+5. **Repository** persiste no banco
+6. **Response** retorna dados formatados
+
+### Banco de Dados
+
+```sql
+-- Usuários
+users (id, email, name, password, created_at, updated_at, deleted_at)
+
+-- URLs
+urls (id, original_url, short_code, clicks, user_id, created_at, updated_at, deleted_at)
+```
+
+## Pontos de Melhoria para Escala
+
+### Horizontal Scaling
+
+- **Load Balancer** - Nginx/HAProxy para distribuir requests
+- **Redis Cluster** - Cache distribuído
+- **Database Sharding** - Particionamento por região/usuário
+- **CDN** - CloudFlare para redirecionamentos
+- **Microserviços** - Separar auth e URL shortening
+
+### Performance
+
+- **Caching** - Redis para URLs frequentes
+- **Database Indexing** - Índices em short_code e user_id
+- **Connection Pooling** - Pool de conexões otimizado
+- **Rate Limiting** - Proteção contra abuse
+- **Async Processing** - Queue para analytics
+
+### Observability
+
+- **Logs** - Estruturados com correlation IDs
+- **Metrics** - Prometheus/Grafana
+- **Tracing** - Jaeger/OpenTelemetry
+- **Alerting** - Alertmanager
+- **Health Checks** - Kubernetes probes
+
+### Desafios de Escala
+
+1. **Collision Detection** - Short codes únicos em escala
+2. **Hot Partitioning** - URLs virais sobrecarregando shards
+3. **Analytics** - Processamento de bilhões de cliques
+4. **Global Distribution** - Latência em diferentes regiões
+5. **URL Expiration** - Limpeza de URLs antigas
+6. **Security** - Rate limiting e proteção DDoS
+
+## Contribuição
+
+1. Fork o projeto
+2. Crie uma branch (`git checkout -b feature/nova-funcionalidade`)
+3. Commit suas mudanças (`git commit -am 'Add nova funcionalidade'`)
+4. Push para branch (`git push origin feature/nova-funcionalidade`)
+5. Abra um Pull Request
+
+## Licença
+
+MIT License - veja [LICENSE](LICENSE) para detalhes.
+
+## Autor
+
+Rafael Almeida - [GitHub](https://github.com/rafaelalmeidav)

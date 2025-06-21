@@ -7,9 +7,8 @@ on:
     branches: [ main ]
 
 jobs:
-  # Job de Análise de Qualidade
   sonarcloud:
-    name: 📊 SonarCloud Analysis
+    name: SonarCloud Analysis
     runs-on: ubuntu-latest
 
     steps:
@@ -30,15 +29,14 @@ jobs:
       - name: 🧪 Run tests with coverage
         run: npm run test:cov
 
-      - name: 📊 SonarCloud Scan
+      - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  # Job de Performance Testing
   performance:
-    name: ⚡ Performance Tests
+    name: Performance Tests
     runs-on: ubuntu-latest
 
     services:
@@ -57,22 +55,22 @@ jobs:
           - 5432:5432
 
     steps:
-      - name: 📦 Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 🟢 Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: 📥 Install dependencies
+      - name: Install dependencies
         run: npm ci
 
-      - name: 🏗️ Build application
+      - name: Build application
         run: npm run build
 
-      - name: 🚀 Start application
+      - name: Start application
         run: |
           npm start &
           sleep 10
@@ -84,12 +82,12 @@ jobs:
           DB_DATABASE: test_db
           JWT_SECRET: test-secret
 
-      - name: ⚡ Run performance tests
+      - name: Run performance tests
         run: |
           npm install -g artillery
           artillery quick --count 10 --num 100 http://localhost:3000/health
 
-      - name: 📊 Upload performance results
+      - name: Upload performance results
         uses: actions/upload-artifact@v3
         with:
           name: performance-results

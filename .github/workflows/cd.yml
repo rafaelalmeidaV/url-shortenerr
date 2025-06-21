@@ -10,28 +10,27 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  # Job de Deploy para Staging
   deploy-staging:
-    name: 🚀 Deploy to Staging
+    name: Deploy to Staging
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     environment: staging
 
     steps:
-      - name: 📦 Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 🔑 Log in to Container Registry
+      - name: Log in to Container Registry
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🐳 Set up Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: 🏗️ Build and push Docker image
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -54,12 +53,12 @@ jobs:
             }' \
             https://backboard.railway.app/graphql/v2
 
-      - name: 🔍 Health check staging
+      - name: Health check staging
         run: |
           sleep 30
           curl -f ${{ secrets.STAGING_URL }}/health || exit 1
 
-      - name: 📢 Notify deployment
+      - name: Notify deployment
         uses: 8398a7/action-slack@v3
         if: always()
         with:
@@ -67,29 +66,28 @@ jobs:
           channel: '#deployments'
           webhook_url: ${{ secrets.SLACK_WEBHOOK }}
 
-  # Job de Deploy para Produção
   deploy-production:
-    name: 🏭 Deploy to Production
+    name: Deploy to Production
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     environment: production
     needs: deploy-staging
 
     steps:
-      - name: 📦 Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: 🔑 Log in to Container Registry
+      - name: Log in to Container Registry
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🐳 Set up Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: 🏗️ Build and push Docker image
+      - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -100,17 +98,17 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: 🚀 Deploy to production
+      - name: Deploy to production
         run: |
           # Deploy script específico para seu provedor
           echo "Deploying to production..."
 
-      - name: 🔍 Health check production
+      - name: Health check production
         run: |
           sleep 60
           curl -f ${{ secrets.PRODUCTION_URL }}/health || exit 1
 
-      - name: 📢 Notify production deployment
+      - name: Notify production deployment
         uses: 8398a7/action-slack@v3
         with:
           status: success
