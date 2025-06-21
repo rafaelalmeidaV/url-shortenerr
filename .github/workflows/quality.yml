@@ -1,0 +1,96 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # Job de Análise de Qualidade
+  sonarcloud:
+    name: 📊 SonarCloud Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📥 Install dependencies
+        run: npm ci
+
+      - name: 🧪 Run tests with coverage
+        run: npm run test:cov
+
+      - name: 📊 SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  # Job de Performance Testing
+  performance:
+    name: ⚡ Performance Tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: 📦 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📥 Install dependencies
+        run: npm ci
+
+      - name: 🏗️ Build application
+        run: npm run build
+
+      - name: 🚀 Start application
+        run: |
+          npm start &
+          sleep 10
+        env:
+          DB_HOST: localhost
+          DB_PORT: 5432
+          DB_USERNAME: test_user
+          DB_PASSWORD: test_password
+          DB_DATABASE: test_db
+          JWT_SECRET: test-secret
+
+      - name: ⚡ Run performance tests
+        run: |
+          npm install -g artillery
+          artillery quick --count 10 --num 100 http://localhost:3000/health
+
+      - name: 📊 Upload performance results
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-results
+          path: artillery-report.json
