@@ -239,6 +239,6 @@ jobs:
           sleep 10
           
           # Test health endpoint
-          docker exec test-container curl -f http://localhost:3000/liveness-readiness || exit 1
+          docker exec test-container curl -f http://localhost:3000/health || exit 1
           
           docker stop test-container
