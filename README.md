@@ -332,14 +332,6 @@ urls (id, original_url, short_code, clicks, user_id, created_at, updated_at, del
 5. **URL Expiration** - Limpeza de URLs antigas
 6. **Security** - Rate limiting e proteção DDoS
 
-## Contribuição
-
-1. Fork o projeto
-2. Crie uma branch (`git checkout -b feature/nova-funcionalidade`)
-3. Commit suas mudanças (`git commit -am 'Add nova funcionalidade'`)
-4. Push para branch (`git push origin feature/nova-funcionalidade`)
-5. Abra um Pull Request
-
 ## Licença
 
 MIT License - veja [LICENSE](LICENSE) para detalhes.
