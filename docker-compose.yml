@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # Banco de dados PostgreSQL
   postgres:
     image: postgres:15-alpine
     container_name: url-shortener-postgres
@@ -24,7 +23,6 @@ services:
       timeout: 5s
       retries: 5
 
-  # Cache Redis (opcional para performance)
   redis:
     image: redis:7-alpine
     container_name: url-shortener-redis
@@ -42,7 +40,6 @@ services:
       timeout: 3s
       retries: 5
 
-  # Aplicação NestJS
   app:
     build:
       context: .
@@ -51,26 +48,21 @@ services:
     container_name: url-shortener-app
     restart: unless-stopped
     environment:
-      # Database
       DB_HOST: postgres
       DB_PORT: "5432"
       DB_USERNAME: url_user
       DB_PASSWORD: url_password_123
       DB_DATABASE: url_shortener
       
-      # Redis
       REDIS_HOST: redis
       REDIS_PORT: "6379"
       REDIS_PASSWORD: redis_password_123
       
-      # JWT
       JWT_SECRET: jwt-super-secret-key-development-only
       
-      # App
       NODE_ENV: development
       PORT: "3000"
       
-      # Observability
       ENABLE_LOGGING: "true"
       ENABLE_METRICS: "true"
       LOG_LEVEL: "debug"
@@ -93,7 +85,6 @@ services:
       retries: 3
       start_period: 40s
 
-  # Prometheus para métricas
   prometheus:
     image: prom/prometheus:latest
     container_name: url-shortener-prometheus
@@ -112,7 +103,6 @@ services:
       - '--web.console.templates=/etc/prometheus/consoles'
       - '--web.enable-lifecycle'
 
-  # Grafana para visualização
   grafana:
     image: grafana/grafana:latest
     container_name: url-shortener-grafana
@@ -130,7 +120,6 @@ services:
     depends_on:
       - prometheus
 
-  # PgAdmin para gerenciar PostgreSQL
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: url-shortener-pgadmin
